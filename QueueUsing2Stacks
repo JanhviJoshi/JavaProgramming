@@ -1,0 +1,45 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        Scanner sc= new Scanner(System.in);
+        int q= sc.nextInt();
+
+        int push_s[]= new int[q];
+        int pop_s[]= new int[q];
+        int top1=-1;
+        int top2= -1;
+
+        for(int i=0; i<q; ++i){
+            int opt= sc.nextInt();
+
+            switch(opt){
+                case 1: //enqueue
+                        int num= sc.nextInt();
+                        push_s[++top1]= num;
+                        break;
+
+                case 2: //dequeue
+                        if(top2==-1){
+                        while(top1!=-1){
+                            ++top2;
+                            pop_s[top2]=push_s[top1--];
+                            }
+                        }
+                       --top2; //pop
+                        break;
+
+                case 3: if(top2==-1){
+                        while(top1!=-1){
+                            ++top2;
+                            pop_s[top2]=push_s[top1--];
+                            }
+                         }
+                        System.out.println(pop_s[top2]);
+            }
+        }
+    }
+}
+
