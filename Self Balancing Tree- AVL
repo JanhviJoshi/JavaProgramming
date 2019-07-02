@@ -1,0 +1,94 @@
+	/* Class node is defined as :
+    class Node 
+    	int val;	//Value
+    	int ht;		//Height
+    	Node left;	//Left child
+    	Node right;	//Right child
+
+	*/
+
+	static Node insert(Node root,int val)
+    {
+    	if(root== null){
+            root= new Node();
+            root.val= val; 
+            root.ht= setHt(root);
+            return root;
+        }
+        if(root.val> val){
+            root.left= insert(root.left, val);    
+        }
+        else if(root.val<val){
+            root.right= insert(root.right, val);
+        }
+        //updating ht of parent node as it changes with every addition
+        root.ht= setHt(root);
+        int bal= balance(root);
+
+        if(bal>1){//left case
+            if(val<root.left.val){ //left left
+                return rightRotate(root);
+            }
+            else if(val>root.left.val){ //left right
+                root.left= leftRotate(root.left);
+                return rightRotate(root);
+            }
+        }
+        else if(bal<-1){
+            //right case
+            if(val> root.right.val) //right right 
+                return leftRotate(root);
+            else if(val<root.right.val) //right left case
+                root.right= rightRotate(root.right);
+                return leftRotate(root);
+        }
+        
+        return root;
+    }
+
+    public static int setHt(Node root){
+        return 1+ Math.max(height(root.left), height(root.right));
+    }
+
+    public static int height(Node root){
+        if(root==null)
+            return -1;
+        else 
+            return root.ht;
+    }
+
+    public static int balance(Node root){
+        if(root==null)
+            return -1;
+        return height(root.left)- height(root.right);
+    }
+
+    public static Node leftRotate(Node node){
+        Node z= node;
+        Node y= node.right;
+        Node t= y.left;
+        
+        y.left= z; 
+        z.right= t;
+        //update heights
+        z.ht= setHt(z);
+        y.ht= setHt(y);
+        
+        return y;
+    }
+
+    public static Node rightRotate(Node node){
+        Node y= node;
+        Node x= y.left;
+        Node t= x.right;
+        
+        x.right=y;
+        y.left= t;
+        
+        //update heights
+        x.ht= setHt(x);
+        y.ht= setHt(y);
+        
+        //return the newly formed root
+        return x;
+    }
