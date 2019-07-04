@@ -1,0 +1,101 @@
+import java.io.*;
+import java.math.*;
+import java.text.*;
+import java.util.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    static HashMap<Integer, LinkedList<Integer>> graph= new HashMap<>();
+    static HashMap<Integer, Boolean> visited= new HashMap<>();
+    static int cnt=0;
+    
+    static int[] componentsInGraph(int[][] gb) {
+        int n= gb.length;
+        makeGraph(gb);
+
+        int high= 0;
+        int low= Integer.MAX_VALUE;
+
+        for(Map.Entry me: graph.entrySet()){
+            int node= (int)me.getKey();
+
+            if(visited.get(node)== null) //node hasnt been visited
+            {
+                //visited.put(node, true);
+                DFS(node);
+            }
+
+            high= Math.max(high, cnt);
+            if(cnt>0)
+                low=Math.min(low, cnt);
+            cnt=0;
+        }
+        //low=Math.min(low, cnt);
+        int arr[]={low, high};
+        return arr;
+    }
+
+    public static void DFS(int node){
+        visited.put(node, true);
+        LinkedList list= graph.get(node); //get list asc with current node that has just been visited
+        ++cnt;
+        Iterator itr= list.iterator();
+        while(itr.hasNext()){
+            int i= (int)itr.next();
+            if(visited.get(i)== null)
+                DFS(i);
+        }
+    }
+
+    public static void makeGraph(int[][] gb){
+        for(int i=0; i<gb.length; ++i){
+            addEdge(gb[i][0], gb[i][1]);
+        }
+    }
+
+    public static void addEdge(int src, int dest){
+            if(graph.get(src)==null){
+                graph.put(src, new LinkedList<Integer>());
+            }
+            if(graph.get(dest)==null){
+                graph.put(dest, new LinkedList<Integer>());
+            }
+
+            graph.get(src).add(dest);
+            graph.get(dest).add(src);
+    }
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int n = Integer.parseInt(scanner.nextLine().trim());
+
+        int[][] gb = new int[n][2];
+
+        for (int gbRowItr = 0; gbRowItr < n; gbRowItr++) {
+            String[] gbRowItems = scanner.nextLine().split(" ");
+
+            for (int gbColumnItr = 0; gbColumnItr < 2; gbColumnItr++) {
+                int gbItem = Integer.parseInt(gbRowItems[gbColumnItr].trim());
+                gb[gbRowItr][gbColumnItr] = gbItem;
+            }
+        }
+        
+        int[] SPACE = componentsInGraph(gb);
+
+        for (int SPACEItr = 0; SPACEItr < SPACE.length; SPACEItr++) {
+            bufferedWriter.write(String.valueOf(SPACE[SPACEItr]));
+
+            if (SPACEItr != SPACE.length - 1) {
+                bufferedWriter.write(" ");
+            }
+        }
+
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
+    }
+}
