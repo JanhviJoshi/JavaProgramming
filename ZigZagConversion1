@@ -1,0 +1,54 @@
+class Solution {
+    public String convert(String s, int numRows) {
+        
+        String fs="";
+        
+        if(numRows==1)
+            fs=s;
+        else{
+        //top row
+        int jump= (numRows-1)+(numRows-2)+1;
+            
+        for(int i=0; i<s.length(); i+=jump){
+            //System.out.print(s.charAt(i));
+            fs+= s.charAt(i);
+            //s=s.replace(s.charAt(i), ' ');
+            //s=s.replaceFirst(String.valueOf(s.charAt(i)), " ");
+            s= s.substring(0, i)+" "+s.substring(i+1);
+        }
+                
+        for(int i=0; i<=numRows-1; ++i){
+            for(int j=0; j<s.length(); ++j){
+                if(s.charAt(j)==' '){
+                    try{
+                        if(s.charAt(j-1)!=' '){
+                            //System.out.print(s.charAt(j-1));
+                            fs+= s.charAt(j-1);
+                            //s=s.replaceFirst(String.valueOf(s.charAt(j-1)), " ");
+                            //s[j-1]=' ';
+                            s= s.substring(0, j-1)+" "+s.substring(j);
+
+                            }
+                        }catch(Exception e){
+                            //continue;
+                            //System.out.println("catch1");
+                            }
+                     try{  
+                        if(s.charAt(j+1)!=' '){
+                            //System.out.print(s.charAt(j+1));
+                            fs+= s.charAt(j+1);
+                            //s=s.replaceFirst(String.valueOf(s.charAt(j+1)), " ");
+                            s= s.substring(0, j+1)+" "+s.substring(j+2);
+
+                            ++j;
+                            }
+                     }catch(Exception e){
+                         //System.out.println(e+" "+j);
+                     }
+                    }
+                }
+            }
+        }
+        return fs;
+        }
+    }
