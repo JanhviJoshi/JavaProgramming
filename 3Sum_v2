@@ -1,0 +1,41 @@
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        
+        List<List<Integer>> l= new ArrayList<>();
+        Arrays.sort(nums);
+   
+        int sm; 
+        int bg;
+        int sum,i;
+        
+        for(i=0; i<nums.length-2; ++i){
+            
+            if(i==0 || (i>0 && nums[i]!= nums[i-1])){
+                sm= i+1; 
+                bg= nums.length-1;
+                sum= 0- nums[i]; //reversing sign of current chosen integer
+
+                while(sm<bg){
+                    if(nums[sm]+nums[bg]== sum){
+                        //adding the triplets in the list
+                        l.add(Arrays.asList(nums[i], nums[sm], nums[bg]));
+                        
+                        //in order to avoid duplicates
+                        while(sm<bg && nums[sm]== nums[sm+1])
+                            ++sm;
+                        while(sm<bg && nums[bg]== nums[bg-1])
+                            --bg;
+                        ++sm;
+                        --bg;
+                    }
+                    else if(nums[sm]+nums[bg]< sum)
+                            ++sm;
+                    else
+                            --bg;   
+                }
+            }
+        }
+        
+        return l;
+    }
+}
